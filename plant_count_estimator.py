@@ -32,14 +32,16 @@ class PlantCountEstimator:
         Returns:
             Dictionnaire des volumes de plantes recommandés.
         """
+        # On nettoie et formate les deux variables pour éviter les bugs de casse !
         type_espace = str(type_espace).lower().strip()
+        style_propre = str(style).strip().capitalize()
         
         # 1. Recherche de la densité dans la matrice avec fallback générique
         if type_espace in ("terrasse", "balcon"):
             density_range = self.DENSITY_PER_M2.get((type_espace, "*"))
         else:
-            # Gestion des espaces de type Jardin
-            density_range = self.DENSITY_PER_M2.get((type_espace, style))
+            # Gestion des espaces de type Jardin avec la variable nettoyée
+            density_range = self.DENSITY_PER_M2.get((type_espace, style_propre))
             if not density_range:
                 # Si le style est inconnu, application d'un profil "Traditionnel / Moyen" par défaut
                 density_range = self.DENSITY_PER_M2.get(("jardin", "Traditionnel"))
